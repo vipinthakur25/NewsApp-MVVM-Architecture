@@ -1,6 +1,8 @@
 package com.vipint.newsapp.ui.topheadline
 
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -29,7 +31,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(binding.root)
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -45,14 +46,17 @@ class MainActivity : AppCompatActivity() {
                 newsListViewModel.uiState.collectLatest {
                     when (it) {
                         is UIState.Error -> {
-                            println("Error**** ${it.message}")
+                            binding.progressBar.visibility = View.GONE
+                            Toast.makeText(this@MainActivity, it.message, Toast.LENGTH_SHORT).show()
                         }
 
                         UIState.Loading -> {
-                            println("Loading*****")
+                            binding.progressBar.visibility = View.VISIBLE
                         }
 
                         is UIState.Success -> {
+                            binding.progressBar.visibility = View.GONE
+                            binding.rvNewsItem.visibility = View.VISIBLE
                             renderUi(it.data)
                         }
                     }

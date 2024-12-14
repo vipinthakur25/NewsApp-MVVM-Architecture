@@ -37,17 +37,16 @@ class ApplicationModule(private val application: NewsApplication) {
         @BaseUrl baseUrl: String,
         gsonConverterFactory: GsonConverterFactory
     ): NetworkService {
-        /*val loggingInterceptor = HttpLoggingInterceptor().apply {
+        val loggingInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
-        }*/
-        val interceptor = HttpLoggingInterceptor()
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-        val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
+        }
+
+        val client = OkHttpClient.Builder().addInterceptor(loggingInterceptor).build()
         return Retrofit
             .Builder()
             .baseUrl(baseUrl)
             .addConverterFactory(gsonConverterFactory)
-
+            .client(client)
             .build()
             .create(NetworkService::class.java)
     }

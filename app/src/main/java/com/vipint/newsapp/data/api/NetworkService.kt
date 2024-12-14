@@ -1,7 +1,7 @@
 package com.vipint.newsapp.data.api
 
 import com.vipint.newsapp.data.model.TopHeadLineResponse
-import com.vipint.newsapp.utils.AppConstant.API_KEY
+import com.vipint.newsapp.utils.AppConstants.API_KEY
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query
