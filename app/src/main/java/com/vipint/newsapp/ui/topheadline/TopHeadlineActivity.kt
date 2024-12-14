@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class TopHeadlineActivity : AppCompatActivity() {
     @Inject
     lateinit var newsListViewModel: TopHeadlinesViewModel
     private lateinit var binding: ActivityMainBinding
@@ -36,8 +36,15 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        initUi()
         setUpObserver()
 
+    }
+
+    private fun initUi() {
+        binding.apply {
+            this.appBar.tvAppBarTitle.text = getString(R.string.top_headline)
+        }
     }
 
     private fun setUpObserver() {
@@ -47,7 +54,7 @@ class MainActivity : AppCompatActivity() {
                     when (it) {
                         is UIState.Error -> {
                             binding.progressBar.visibility = View.GONE
-                            Toast.makeText(this@MainActivity, it.message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@TopHeadlineActivity, it.message, Toast.LENGTH_SHORT).show()
                         }
 
                         UIState.Loading -> {

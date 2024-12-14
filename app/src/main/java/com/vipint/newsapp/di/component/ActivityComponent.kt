@@ -2,7 +2,7 @@ package com.vipint.newsapp.di.component
 
 import com.vipint.newsapp.di.ActivityScope
 import com.vipint.newsapp.di.modules.ActivityModule
-import com.vipint.newsapp.ui.topheadline.MainActivity
+import com.vipint.newsapp.ui.topheadline.TopHeadlineActivity
 import dagger.Component
 import javax.inject.Singleton
 
@@ -11,6 +11,6 @@ import javax.inject.Singleton
 interface ActivityComponent {
 
     @Singleton
-    fun inject(activity: MainActivity)
+    fun inject(activity: TopHeadlineActivity)
 
 }

@@ -15,7 +15,7 @@
         android:theme="@style/Theme.NewsAppMVVMArchitecture"
         tools:targetApi="31">
         <activity
-            android:name=".ui.topheadline.MainActivity"
+            android:name=".ui.topheadline.TopHeadlineActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
