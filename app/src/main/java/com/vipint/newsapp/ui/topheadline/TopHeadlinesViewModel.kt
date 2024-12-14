@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,11 +25,14 @@ class TopHeadlinesViewModel @Inject constructor(private val topHeadlinesReposito
 
     private fun fetchNews() {
         viewModelScope.launch {
-            topHeadlinesRepository.getTopHeadline(COUNTRY).catch {
-                _uiState.value = UIState.Error(it.message.toString())
-            }.collectLatest {
-                _uiState.value = UIState.Success(it)
-            }
+            topHeadlinesRepository.getTopHeadline(COUNTRY)
+                .catch {
+                    _uiState.value = UIState.Error(it.message.toString())
+                }
+                .collectLatest {
+                    _uiState.value = UIState.Success(it)
+                }
+
         }
     }
 }

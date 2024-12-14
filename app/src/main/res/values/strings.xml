@@ -3,4 +3,5 @@
     <string name="back">back</string>
     <string name="search">Search</string>
     <string name="top_headline">Top Headlines</string>
+    <string name="search_hint"><![CDATA[Search for topics, locations & sources]]></string>
 </resources>

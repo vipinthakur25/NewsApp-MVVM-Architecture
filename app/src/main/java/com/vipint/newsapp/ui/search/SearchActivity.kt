@@ -1,7 +1,8 @@
-package com.vipint.newsapp.ui.topheadline
+package com.vipint.newsapp.ui.search
 
-import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -14,57 +15,50 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.vipint.newsapp.NewsApplication
 import com.vipint.newsapp.R
 import com.vipint.newsapp.data.model.ArticlesItem
-import com.vipint.newsapp.databinding.ActivityTopHeadlinesBinding
+import com.vipint.newsapp.databinding.ActivitySearchBinding
 import com.vipint.newsapp.di.component.DaggerActivityComponent
 import com.vipint.newsapp.di.modules.ActivityModule
 import com.vipint.newsapp.ui.base.UIState
-import com.vipint.newsapp.ui.search.SearchActivity
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class TopHeadlineActivity : AppCompatActivity() {
+class SearchActivity : AppCompatActivity() {
+    private lateinit var binding: ActivitySearchBinding
+
     @Inject
-    lateinit var newsListViewModel: TopHeadlinesViewModel
-    private lateinit var binding: ActivityTopHeadlinesBinding
+    lateinit var searchNewsViewModel: SearchNewsViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
-        binding = ActivityTopHeadlinesBinding.inflate(layoutInflater)
-        injectDependencies()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        injectDependencies()
+        binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        initUi()
+        initView()
         setUpObserver()
-
-    }
-
-    private fun initUi() {
-        binding.apply {
-            this.appBar.tvAppBarTitle.text = getString(R.string.top_headline)
-            this.appBar.ivSearch.setOnClickListener {
-                startActivity(Intent(this@TopHeadlineActivity, SearchActivity::class.java))
-            }
-
-        }
     }
 
     private fun setUpObserver() {
+
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                newsListViewModel.uiState.collectLatest {
+                searchNewsViewModel.uiState.collectLatest {
                     when (it) {
                         is UIState.Error -> {
                             binding.progressBar.visibility = View.GONE
-                            Toast.makeText(this@TopHeadlineActivity, it.message, Toast.LENGTH_SHORT).show()
+                            binding.rvNewsItem.visibility = View.GONE
+                            Toast.makeText(this@SearchActivity, it.message, Toast.LENGTH_SHORT)
+                                .show()
                         }
 
                         UIState.Loading -> {
                             binding.progressBar.visibility = View.VISIBLE
+                            binding.rvNewsItem.visibility = View.GONE
                         }
 
                         is UIState.Success -> {
@@ -85,19 +79,42 @@ class TopHeadlineActivity : AppCompatActivity() {
 
     private fun renderUi(articlesItems: List<ArticlesItem>?) {
         articlesItems?.let {
-            val headlineAdapter = TopHeadlineAdapter(it)
+            val searchNewsAdapter = SearchNewsAdapter(it)
             binding.rvNewsItem.apply {
-                adapter = headlineAdapter
+                adapter = searchNewsAdapter
                 hasFixedSize()
             }
         }
+    }
 
+    private fun initView() {
+        binding.appBar.tvAppBarTitle.text = getString(R.string.search)
+        binding.appBar.ivSearch.visibility = View.GONE
+        binding.searchLayout.ivBack.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+        binding.searchLayout.etSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (p0.toString().isNotEmpty() && p0.toString().length > 5) {
+                    searchNewsViewModel.getSearchNews(p0.toString())
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+
+        })
     }
 
     private fun injectDependencies() {
-        DaggerActivityComponent.builder()
+        DaggerActivityComponent
+            .builder()
             .applicationComponent((application as NewsApplication).applicationComponent)
-            .activityModule(ActivityModule(this)).build().inject(this)
+            .activityModule(ActivityModule(this)).build().injectSearchActivity(this)
     }
 }

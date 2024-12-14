@@ -7,4 +7,6 @@ sealed interface UIState<out T> {
     data class Error(val message: String) : UIState<Nothing>
 
     data object Loading : UIState<Nothing>
+
+    data object Idle : UIState<Nothing>
 }

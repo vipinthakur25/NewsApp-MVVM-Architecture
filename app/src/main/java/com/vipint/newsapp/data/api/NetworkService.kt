@@ -11,7 +11,12 @@ interface NetworkService {
     @GET("top-headlines")
     suspend fun fetchTopHeadlines(
         @Query("country") country: String,
-        @Header("X-Api-Key") apiKey : String = API_KEY
+        @Header("X-Api-Key") apiKey: String = API_KEY
     ): TopHeadLineResponse
 
+    @GET("everything")
+    suspend fun fetchSearchNews(
+        @Query("q") searchQuery: String,
+        @Header("X-Api-Key") apiKey: String = API_KEY
+    ): TopHeadLineResponse
 }
