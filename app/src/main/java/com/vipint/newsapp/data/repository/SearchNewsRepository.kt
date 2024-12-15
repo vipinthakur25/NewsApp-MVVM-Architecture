@@ -11,11 +11,5 @@ import javax.inject.Singleton
 @Singleton
 class SearchNewsRepository @Inject constructor(private val networkService: NetworkService)  {
 
-    fun getSearchNews(searchQuery: String): Flow<List<ArticlesItem>?> {
-        return flow {
-            emit(networkService.fetchSearchNews(searchQuery))
-        }.map {
-            it.articles
-        }
-    }
+    suspend fun getSearchNews(searchQuery: String) = networkService.fetchSearchNews(searchQuery)
 }
