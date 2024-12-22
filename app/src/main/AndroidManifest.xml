@@ -16,6 +16,12 @@
         android:theme="@style/Theme.NewsAppMVVMArchitecture"
         tools:targetApi="31">
         <activity
+            android:name=".ui.news_by_sources.NewsBySourcesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.news_sources.NewsSourcesActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.search.SearchActivity"
             android:exported="false" />
         <activity

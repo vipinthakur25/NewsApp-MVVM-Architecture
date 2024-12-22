@@ -50,28 +50,8 @@ class SearchActivity : AppCompatActivity() {
         setUpObserver()
     }
 
-    private fun setUpObserver() {
-    }
-
-    private fun renderUi(articlesItems: List<ArticlesItem>?) {
-        articlesItems?.let {
-            val searchNewsAdapter = SearchNewsAdapter(it)
-            binding.rvNewsItem.apply {
-                adapter = searchNewsAdapter
-                hasFixedSize()
-            }
-        }
-    }
-
     @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
-    private fun initView() {
-        binding.appBar.tvAppBarTitle.text = getString(R.string.search)
-        binding.appBar.ivSearch.visibility = View.GONE
-        binding.searchLayout.ivBack.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
-
-
+    private fun setUpObserver() {
         lifecycleScope.launch {
             binding.searchLayout.etSearch.getTextChangedStateFlow()
                 .debounce(300)
@@ -116,6 +96,26 @@ class SearchActivity : AppCompatActivity() {
 
                 }
         }
+    }
+
+    private fun renderUi(articlesItems: List<ArticlesItem>?) {
+        articlesItems?.let {
+            val searchNewsAdapter = SearchNewsAdapter(it)
+            binding.rvNewsItem.apply {
+                adapter = searchNewsAdapter
+                hasFixedSize()
+            }
+        }
+    }
+
+
+    private fun initView() {
+        binding.appBar.tvAppBarTitle.text = getString(R.string.search)
+        binding.appBar.ivSearch.visibility = View.GONE
+        binding.searchLayout.ivBack.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
 
     }
 

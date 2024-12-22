@@ -3,6 +3,9 @@ package com.vipint.newsapp.di.component
 import android.content.Context
 import com.vipint.newsapp.NewsApplication
 import com.vipint.newsapp.data.api.NetworkService
+import com.vipint.newsapp.data.repository.NewsBySourcesRepository
+import com.vipint.newsapp.data.repository.NewsSourcesRepository
+import com.vipint.newsapp.data.repository.NewsTypeRepository
 import com.vipint.newsapp.data.repository.SearchNewsRepository
 import com.vipint.newsapp.data.repository.TopHeadlinesRepository
 import com.vipint.newsapp.di.ApplicationContext
@@ -20,7 +23,13 @@ interface ApplicationComponent {
 
     fun getTopHeadlineRepository(): TopHeadlinesRepository
 
+    fun getNewsSourcesRepository(): NewsSourcesRepository
+
     fun getSearchNewsRepository(): SearchNewsRepository
+
+    fun getNewsTypeRepository(): NewsTypeRepository
+
+    fun getTopHeadlineByNewsSourcesRepository(): NewsBySourcesRepository
 
     fun getNetworkService(): NetworkService
 }

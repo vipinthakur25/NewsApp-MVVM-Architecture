@@ -1,5 +1,6 @@
 package com.vipint.newsapp.data.api
 
+import com.vipint.newsapp.data.model.NewsSourcesResponse
 import com.vipint.newsapp.data.model.TopHeadLineResponse
 import com.vipint.newsapp.utils.AppConstants.API_KEY
 import retrofit2.http.GET
@@ -17,6 +18,18 @@ interface NetworkService {
     @GET("everything")
     suspend fun fetchSearchNews(
         @Query("q") searchQuery: String,
+        @Header("X-Api-Key") apiKey: String = API_KEY
+    ): TopHeadLineResponse
+
+    @GET("sources")
+    suspend fun getNewsSources(
+        @Header("X-Api-Key") apiKey: String = API_KEY
+    ): NewsSourcesResponse
+
+
+    @GET("top-headlines")
+    suspend fun fetchTopHeadlinesBySources(
+        @Query("sources") sources: String,
         @Header("X-Api-Key") apiKey: String = API_KEY
     ): TopHeadLineResponse
 }
