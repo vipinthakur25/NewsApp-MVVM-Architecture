@@ -13,16 +13,13 @@ import javax.inject.Singleton
 @Component(dependencies = [ApplicationComponent::class], modules = [ActivityModule::class])
 interface ActivityComponent {
 
-    @Singleton
+
     fun inject(activity: TopHeadlineActivity)
 
-    @Singleton
     fun injectSearchActivity(activity: SearchActivity)
 
-    @Singleton
     fun injectNewsSourcesActivity(activity: NewsSourcesActivity)
 
-    @Singleton
     fun injectNewsBySourcesActivity(activity: NewsBySourcesActivity)
 
 }

@@ -1,6 +1,8 @@
 package com.vipint.newsapp.ui.search
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -18,15 +20,7 @@ import com.vipint.newsapp.di.component.DaggerActivityComponent
 import com.vipint.newsapp.di.modules.ActivityModule
 import com.vipint.newsapp.ui.base.UIState
 import com.vipint.newsapp.utils.getTextChangedStateFlow
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -50,52 +44,53 @@ class SearchActivity : AppCompatActivity() {
         setUpObserver()
     }
 
-    @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
     private fun setUpObserver() {
+        val data = binding.searchLayout.etSearch.getTextChangedStateFlow()
+        binding.searchLayout.etSearch.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                searchNewsViewModel.getSearchKey(p0.toString())
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+
+        })
+
         lifecycleScope.launch {
-            binding.searchLayout.etSearch.getTextChangedStateFlow()
-                .debounce(300)
-                .filter {
-                    if (it.isEmpty()) {
-                        binding.searchLayout.etSearch.setText("")
-                        return@filter false
-                    } else {
-                        return@filter true
-                    }
-                }.distinctUntilChanged()
-                .flatMapLatest { query ->
-                    searchNewsViewModel.getSearchNews(query)
-                }
-                .flowOn(Dispatchers.Default)
-                .collectLatest {
-                    repeatOnLifecycle(Lifecycle.State.STARTED) {
-                        when (it) {
-                            is UIState.Error -> {
-                                binding.progressBar.visibility = View.GONE
-                                binding.rvNewsItem.visibility = View.GONE
-                                Toast.makeText(this@SearchActivity, it.message, Toast.LENGTH_SHORT)
-                                    .show()
-                            }
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                searchNewsViewModel.searchDataStateFlow.collectLatest {
+                    when (it) {
+                        is UIState.Error -> {
+                            binding.progressBar.visibility = View.GONE
+                            binding.rvNewsItem.visibility = View.GONE
+                            Toast.makeText(this@SearchActivity, it.message, Toast.LENGTH_SHORT)
+                                .show()
+                        }
 
-                            UIState.Loading -> {
-                                binding.progressBar.visibility = View.VISIBLE
-                                binding.rvNewsItem.visibility = View.GONE
-                            }
+                        UIState.Loading -> {
+                            binding.progressBar.visibility = View.VISIBLE
+                            binding.rvNewsItem.visibility = View.GONE
+                        }
 
-                            is UIState.Success -> {
-                                binding.progressBar.visibility = View.GONE
-                                binding.rvNewsItem.visibility = View.VISIBLE
-                                renderUi(it.data)
-                            }
+                        is UIState.Success -> {
+                            binding.progressBar.visibility = View.GONE
+                            binding.rvNewsItem.visibility = View.VISIBLE
+                            renderUi(it.data)
+                        }
 
-                            UIState.Idle -> {
-                                binding.progressBar.visibility = View.GONE
-                            }
+                        UIState.Idle -> {
+                            binding.progressBar.visibility = View.GONE
                         }
                     }
-
                 }
+            }
         }
+
     }
 
     private fun renderUi(articlesItems: List<ArticlesItem>?) {
