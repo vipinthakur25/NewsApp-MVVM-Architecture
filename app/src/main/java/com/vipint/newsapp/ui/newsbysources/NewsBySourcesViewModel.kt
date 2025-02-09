@@ -1,4 +1,4 @@
-package com.vipint.newsapp.ui.news_by_sources
+package com.vipint.newsapp.ui.newsbysources
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

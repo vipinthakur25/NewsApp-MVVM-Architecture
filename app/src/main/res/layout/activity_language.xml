@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.newsbysources.NewsBySourcesActivity">
+    tools:context=".ui.language.LanguageActivity">
     <include
         android:id="@+id/appBar"
         layout="@layout/custom_app_bar_layout" />

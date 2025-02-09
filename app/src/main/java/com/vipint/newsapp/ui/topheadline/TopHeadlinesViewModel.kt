@@ -5,12 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.vipint.newsapp.data.model.ArticlesItem
 import com.vipint.newsapp.data.repository.TopHeadlinesRepository
 import com.vipint.newsapp.ui.base.UIState
-import com.vipint.newsapp.utils.AppConstants.COUNTRY
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,13 +17,10 @@ class TopHeadlinesViewModel @Inject constructor(private val topHeadlinesReposito
     private val _uiState = MutableStateFlow<UIState<List<ArticlesItem>?>>(UIState.Loading)
     val uiState: StateFlow<UIState<List<ArticlesItem>?>> = _uiState
 
-    init {
-        fetchNews()
-    }
 
-    private fun fetchNews() {
+    fun fetchNews(country: String) {
         viewModelScope.launch {
-            topHeadlinesRepository.getTopHeadline(COUNTRY)
+            topHeadlinesRepository.getTopHeadline(country)
                 .catch {
                     _uiState.value = UIState.Error(it.message.toString())
                 }

@@ -1,4 +1,4 @@
-package com.vipint.newsapp.ui.news_sources
+package com.vipint.newsapp.ui.newssources
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

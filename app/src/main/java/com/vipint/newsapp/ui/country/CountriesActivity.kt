@@ -1,5 +1,6 @@
-package com.vipint.newsapp.ui.news_sources
+package com.vipint.newsapp.ui.country
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -13,26 +14,24 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.vipint.newsapp.NewsApplication
 import com.vipint.newsapp.R
-import com.vipint.newsapp.data.model.SourcesItem
-import com.vipint.newsapp.databinding.ActivityNewsSourcesBinding
+import com.vipint.newsapp.data.model.Country
+import com.vipint.newsapp.databinding.ActivityCountriesBinding
 import com.vipint.newsapp.di.component.DaggerActivityComponent
 import com.vipint.newsapp.di.modules.ActivityModule
 import com.vipint.newsapp.ui.base.UIState
-import com.vipint.newsapp.ui.news_by_sources.NewsBySourcesActivity
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class NewsSourcesActivity : AppCompatActivity() {
+class CountriesActivity : AppCompatActivity() {
     @Inject
-    lateinit var newsSourcesViewModel: NewsSourcesViewModel
-    private lateinit var binding: ActivityNewsSourcesBinding
-
+    lateinit var countriesViewModel: CountriesViewModel
+    lateinit var binding: ActivityCountriesBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        binding = ActivityCountriesBinding.inflate(layoutInflater)
         injectDependencies()
-        binding = ActivityNewsSourcesBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -40,23 +39,22 @@ class NewsSourcesActivity : AppCompatActivity() {
             insets
         }
         initView()
-        setUpObserver()
+        initObservers()
     }
 
-
-    private fun setUpObserver() {
+    private fun initObservers() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                newsSourcesViewModel.uiState.collectLatest {
+                countriesViewModel.countries.collectLatest {
                     when (it) {
                         is UIState.Error -> {
                             binding.progressBar.visibility = View.GONE
-                            Toast.makeText(this@NewsSourcesActivity, it.message, Toast.LENGTH_SHORT)
+                            Toast.makeText(this@CountriesActivity, it.message, Toast.LENGTH_SHORT)
                                 .show()
                         }
 
                         UIState.Idle -> {
-
+                            binding.progressBar.visibility = View.VISIBLE
                         }
 
                         UIState.Loading -> {
@@ -66,36 +64,32 @@ class NewsSourcesActivity : AppCompatActivity() {
                         is UIState.Success -> {
                             binding.progressBar.visibility = View.GONE
                             binding.rvNewsSources.visibility = View.VISIBLE
-                            renderUi(it.data)
+                            initCountriesRV(it.data)
                         }
                     }
                 }
             }
         }
-
     }
 
-    private fun renderUi(data: List<SourcesItem>?) {
-        data?.let {
-            val newsSourcesAdapter = NewsSourcesAdapter(it) { sourceItem ->
-                NewsBySourcesActivity.start(this, sourceItem.id)
-            }
-            binding.rvNewsSources.apply {
-                adapter = newsSourcesAdapter
-                hasFixedSize()
-            }
+    private fun initCountriesRV(data: List<Country>) {
+        val countriesAdapter = CountriesAdapter(data) {
+            startActivity(Intent(this, NewsByCountryActivity::class.java).putExtra("country", it))
         }
-
+        binding.rvNewsSources.apply {
+            adapter = countriesAdapter
+            hasFixedSize()
+        }
     }
 
     private fun initView() {
         binding.appBar.apply {
             this.tvAppBarTitle.text =
-                ContextCompat.getString(this@NewsSourcesActivity, R.string.news_sources)
+                ContextCompat.getString(this@CountriesActivity, R.string.select_country)
             this.ivSearch.visibility = View.INVISIBLE
             this.ivAction.setImageDrawable(
                 ContextCompat.getDrawable(
-                    this@NewsSourcesActivity,
+                    this@CountriesActivity,
                     R.drawable.ic_back
                 )
             )
@@ -107,9 +101,8 @@ class NewsSourcesActivity : AppCompatActivity() {
 
 
     private fun injectDependencies() {
-        DaggerActivityComponent
-            .builder()
+        DaggerActivityComponent.builder()
             .applicationComponent((application as NewsApplication).applicationComponent)
-            .activityModule(ActivityModule(this)).build().injectNewsSourcesActivity(this)
+            .activityModule(ActivityModule(this)).build().inject(this)
     }
 }

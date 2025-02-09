@@ -1,7 +1,5 @@
-package com.vipint.newsapp.ui.news_by_sources
+package com.vipint.newsapp.ui.newssources
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -15,26 +13,26 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.vipint.newsapp.NewsApplication
 import com.vipint.newsapp.R
-import com.vipint.newsapp.data.model.ArticlesItem
-import com.vipint.newsapp.databinding.ActivityNewsBySourcesBinding
+import com.vipint.newsapp.data.model.SourcesItem
+import com.vipint.newsapp.databinding.ActivityNewsSourcesBinding
 import com.vipint.newsapp.di.component.DaggerActivityComponent
 import com.vipint.newsapp.di.modules.ActivityModule
 import com.vipint.newsapp.ui.base.UIState
-import com.vipint.newsapp.ui.topheadline.TopHeadlineAdapter
+import com.vipint.newsapp.ui.newsbysources.NewsBySourcesActivity
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class NewsBySourcesActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityNewsBySourcesBinding
-
+class NewsSourcesActivity : AppCompatActivity() {
     @Inject
-    lateinit var newsBySourcesViewModel: NewsBySourcesViewModel
+    lateinit var newsSourcesViewModel: NewsSourcesViewModel
+    private lateinit var binding: ActivityNewsSourcesBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         injectDependencies()
-        binding = ActivityNewsBySourcesBinding.inflate(layoutInflater)
+        binding = ActivityNewsSourcesBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -45,57 +43,24 @@ class NewsBySourcesActivity : AppCompatActivity() {
         setUpObserver()
     }
 
-    private fun initView() {
-        val newsBySourceId = intent.getStringExtra(NEWS_SOURCE_ID)
-        newsBySourceId?.let {
-            newsBySourcesViewModel.getNewsBySources(it)
-        }
-        binding.appBar.apply {
-            this.tvAppBarTitle.text =
-                ContextCompat.getString(this@NewsBySourcesActivity, R.string.news_sources)
-            this.ivSearch.visibility = View.INVISIBLE
-            this.ivAction.setImageDrawable(
-                ContextCompat.getDrawable(
-                    this@NewsBySourcesActivity,
-                    R.drawable.ic_back
-                )
-            )
-            this.ivAction.setOnClickListener {
-                onBackPressedDispatcher.onBackPressed()
-            }
-        }
-    }
-
-    companion object {
-        private const val NEWS_SOURCE_ID = "news_source_id"
-
-        fun start(context: Context, newsSourceId: String? = null) {
-            val intent = Intent(context, NewsBySourcesActivity::class.java).apply {
-                putExtra(NEWS_SOURCE_ID, newsSourceId)
-            }
-            context.startActivity(intent)
-        }
-    }
 
     private fun setUpObserver() {
-
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                newsBySourcesViewModel.uiState.collectLatest {
+                newsSourcesViewModel.uiState.collectLatest {
                     when (it) {
                         is UIState.Error -> {
                             binding.progressBar.visibility = View.GONE
-                            Toast.makeText(
-                                this@NewsBySourcesActivity, it.message, Toast.LENGTH_SHORT
-                            ).show()
+                            Toast.makeText(this@NewsSourcesActivity, it.message, Toast.LENGTH_SHORT)
+                                .show()
                         }
 
                         UIState.Idle -> {
-                            binding.progressBar.visibility = View.VISIBLE
+
                         }
 
                         UIState.Loading -> {
-
+                            binding.progressBar.visibility = View.VISIBLE
                         }
 
                         is UIState.Success -> {
@@ -110,20 +75,41 @@ class NewsBySourcesActivity : AppCompatActivity() {
 
     }
 
-    private fun renderUi(articlesItems: List<ArticlesItem>?) {
-        articlesItems?.let {
-            val headlineAdapter = TopHeadlineAdapter(it)
+    private fun renderUi(data: List<SourcesItem>?) {
+        data?.let {
+            val newsSourcesAdapter = NewsSourcesAdapter(it) { sourceItem ->
+                NewsBySourcesActivity.start(this, sourceItem.id)
+            }
             binding.rvNewsSources.apply {
-                adapter = headlineAdapter
+                adapter = newsSourcesAdapter
                 hasFixedSize()
             }
         }
 
     }
 
+    private fun initView() {
+        binding.appBar.apply {
+            this.tvAppBarTitle.text =
+                ContextCompat.getString(this@NewsSourcesActivity, R.string.news_sources)
+            this.ivSearch.visibility = View.INVISIBLE
+            this.ivAction.setImageDrawable(
+                ContextCompat.getDrawable(
+                    this@NewsSourcesActivity,
+                    R.drawable.ic_back
+                )
+            )
+            this.ivAction.setOnClickListener {
+                onBackPressedDispatcher.onBackPressed()
+            }
+        }
+    }
+
+
     private fun injectDependencies() {
-        DaggerActivityComponent.builder()
+        DaggerActivityComponent
+            .builder()
             .applicationComponent((application as NewsApplication).applicationComponent)
-            .activityModule(ActivityModule(this)).build().injectNewsBySourcesActivity(this)
+            .activityModule(ActivityModule(this)).build().inject(this)
     }
 }

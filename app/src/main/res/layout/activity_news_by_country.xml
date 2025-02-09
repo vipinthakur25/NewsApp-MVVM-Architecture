@@ -5,16 +5,18 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.newsbysources.NewsBySourcesActivity">
+    tools:context=".ui.country.NewsByCountryActivity">
+
     <include
         android:id="@+id/appBar"
         layout="@layout/custom_app_bar_layout" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvNewsSources"
+        android:id="@+id/rvNewsItem"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginHorizontal="12dp"
+
         android:orientation="vertical"
         android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -22,7 +24,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBar"
-        tools:listitem="@layout/news_type_layout" />
+        tools:listitem="@layout/top_headline_item_layout" />
 
     <ProgressBar
         android:id="@+id/progressBar"

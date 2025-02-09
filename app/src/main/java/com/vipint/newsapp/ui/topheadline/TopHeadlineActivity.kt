@@ -21,8 +21,11 @@ import com.vipint.newsapp.di.modules.ActivityModule
 import com.vipint.newsapp.ui.base.UIState
 import com.vipint.newsapp.ui.bottomsheet.FilterNewsBottomSheetFragment
 import com.vipint.newsapp.ui.bottomsheet.NewsTypeViewModel
-import com.vipint.newsapp.ui.news_sources.NewsSourcesActivity
+import com.vipint.newsapp.ui.country.CountriesActivity
+import com.vipint.newsapp.ui.language.LanguageActivity
+import com.vipint.newsapp.ui.newssources.NewsSourcesActivity
 import com.vipint.newsapp.ui.search.SearchActivity
+import com.vipint.newsapp.utils.AppConstants.COUNTRY
 import com.vipint.newsapp.utils.NewsType
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -52,6 +55,7 @@ class TopHeadlineActivity : AppCompatActivity() {
     }
 
     private fun initUi() {
+        newsListViewModel.fetchNews(COUNTRY)
         binding.apply {
             this.appBar.tvAppBarTitle.text = getString(R.string.top_headline)
             this.appBar.ivSearch.visibility = View.VISIBLE
@@ -68,6 +72,7 @@ class TopHeadlineActivity : AppCompatActivity() {
                 navigateToDialog()
             }
         }
+
     }
 
     private fun navigateToDialog() {
@@ -83,10 +88,12 @@ class TopHeadlineActivity : AppCompatActivity() {
                 }
 
                 NewsType.COUNTRIES -> {
+                    startActivity(Intent(this, CountriesActivity::class.java))
 
                 }
 
                 NewsType.LANGUAGE -> {
+                    startActivity(Intent(this, LanguageActivity::class.java))
 
                 }
             }

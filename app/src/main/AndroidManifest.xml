@@ -16,10 +16,22 @@
         android:theme="@style/Theme.NewsAppMVVMArchitecture"
         tools:targetApi="31">
         <activity
-            android:name=".ui.news_by_sources.NewsBySourcesActivity"
+            android:name=".ui.language.NewsByLanguageActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.news_sources.NewsSourcesActivity"
+            android:name=".ui.country.NewsByCountryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.language.LanguageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.country.CountriesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.newsbysources.NewsBySourcesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.newssources.NewsSourcesActivity"
             android:exported="false" />
         <activity
             android:name=".ui.search.SearchActivity"

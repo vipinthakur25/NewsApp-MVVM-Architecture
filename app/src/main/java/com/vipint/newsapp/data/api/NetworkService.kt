@@ -32,4 +32,11 @@ interface NetworkService {
         @Query("sources") sources: String,
         @Header("X-Api-Key") apiKey: String = API_KEY
     ): TopHeadLineResponse
+
+    @GET("top-headlines")
+    suspend fun fetchTopHeadlinesByLanguage(
+        @Query("language") language: String,
+        @Header("X-Api-Key") apiKey: String = API_KEY
+    ): TopHeadLineResponse
+
 }
