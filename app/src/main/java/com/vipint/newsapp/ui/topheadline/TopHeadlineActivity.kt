@@ -77,7 +77,9 @@ class TopHeadlineActivity : AppCompatActivity() {
 
     private fun navigateToDialog() {
         val typeLit = newsTypeViewModel.fetchNewsType()
-        val bottomSheetDialogFragment = FilterNewsBottomSheetFragment(typeLit) {
+        val bottomSheetDialogFragment = FilterNewsBottomSheetFragment.newInstance(typeLit)
+
+        bottomSheetDialogFragment.onNewsSourceClick = {
             when (it) {
                 NewsType.TOP_HEADLINE -> {
 
