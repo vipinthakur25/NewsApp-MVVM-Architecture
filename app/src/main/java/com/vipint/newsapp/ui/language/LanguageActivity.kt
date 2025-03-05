@@ -1,6 +1,5 @@
 package com.vipint.newsapp.ui.language
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -19,7 +18,8 @@ import com.vipint.newsapp.databinding.ActivityLanguageBinding
 import com.vipint.newsapp.di.component.DaggerActivityComponent
 import com.vipint.newsapp.di.modules.ActivityModule
 import com.vipint.newsapp.ui.base.UIState
-import com.vipint.newsapp.ui.country.NewsByCountryActivity
+import com.vipint.newsapp.ui.news.NewsActivity
+import com.vipint.newsapp.utils.AppConstants.NEWS_BY_LANGUAGE
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -92,8 +92,17 @@ class LanguageActivity : AppCompatActivity() {
     }
 
     private fun initLanguageRV(data: List<Language>) {
-        val countriesAdapter = LanguageAdapter(data){
-            startActivity(Intent(this, NewsByLanguageActivity::class.java).putExtra("language", it))
+        val countriesAdapter = LanguageAdapter(data)
+        countriesAdapter.onItemClick = { _, data ->
+
+            startActivity(
+                NewsActivity.getStartIntent(
+                    context = this,
+                    language = data.id,
+                    newsType = NEWS_BY_LANGUAGE
+                )
+            )
+
         }
         binding.rvNewsSources.apply {
             adapter = countriesAdapter

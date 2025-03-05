@@ -9,8 +9,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class NewsBySourcesRepository @Inject constructor(private val networkService: NetworkService) {
-
+class NewsRepository @Inject constructor(private val networkService: NetworkService) {
     fun getNewsBySources(sources: String): Flow<List<ArticlesItem>?> {
         return flow {
             emit(networkService.fetchTopHeadlinesBySources(sources = sources))
@@ -19,4 +18,19 @@ class NewsBySourcesRepository @Inject constructor(private val networkService: Ne
         }
     }
 
+    fun getNewsByLanguage(language: String): Flow<List<ArticlesItem>?> {
+        return flow {
+            emit(networkService.fetchTopHeadlinesByLanguage(language))
+        }.map {
+            it.articles
+        }
+    }
+
+    fun getNewsByCountry(country: String): Flow<List<ArticlesItem>?> {
+        return flow {
+            emit(networkService.fetchTopHeadlines(country))
+        }.map {
+            it.articles
+        }
+    }
 }

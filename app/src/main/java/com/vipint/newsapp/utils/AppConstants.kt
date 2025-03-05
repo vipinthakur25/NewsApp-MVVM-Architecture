@@ -7,6 +7,11 @@ object AppConstants {
     const val API_KEY = "802611ded0fa4670868cc7319f5a3d73"
     const val COUNTRY = "us"
 
+    const val NEWS_BY_SOURCES = "sources"
+    const val NEWS_BY_COUNTRY = "country"
+    const val NEWS_BY_LANGUAGE = "language"
+
+
     val COUNTRIES = listOf(
         Country("ae", "United Arab Emirates"),
         Country("ar", "Argentina"),

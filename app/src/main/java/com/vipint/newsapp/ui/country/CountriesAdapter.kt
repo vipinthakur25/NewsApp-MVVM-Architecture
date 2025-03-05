@@ -5,12 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.vipint.newsapp.data.model.Country
 import com.vipint.newsapp.databinding.NewsTypeLayoutBinding
+import com.vipint.newsapp.utils.ItemClickListener
 
 class CountriesAdapter(
-    private val countriesList: List<Country>,
-    private val onClick: (Country) -> Unit
+    private val countriesList: List<Country>
 ) :
     RecyclerView.Adapter<CountriesAdapter.CountriesViewHolder>() {
+    lateinit var onItemClick: ItemClickListener<Country>
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -35,7 +36,7 @@ class CountriesAdapter(
 
         fun bind(country: Country) {
             binding.root.setOnClickListener {
-                onClick.invoke(country)
+                onItemClick.invoke(adapterPosition, country)
             }
             binding.tvTypeTitle.text = country.name
         }

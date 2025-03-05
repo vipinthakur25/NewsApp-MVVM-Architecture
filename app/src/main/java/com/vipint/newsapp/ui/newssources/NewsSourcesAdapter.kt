@@ -5,12 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.vipint.newsapp.data.model.SourcesItem
 import com.vipint.newsapp.databinding.NewsTypeLayoutBinding
+import com.vipint.newsapp.utils.ItemClickListener
 
 class NewsSourcesAdapter(
     private val newsSources: List<SourcesItem>,
-    val onItemClick: (SourcesItem) -> Unit
 ) :
     RecyclerView.Adapter<NewsSourcesAdapter.NewsSourcesViewHolder>() {
+    lateinit var onItemClick: ItemClickListener<SourcesItem>
     override fun onCreateViewHolder(
         parent: ViewGroup, viewType: Int
     ): NewsSourcesAdapter.NewsSourcesViewHolder {
@@ -36,7 +37,7 @@ class NewsSourcesAdapter(
                 this.text = newsSource.name
             }
             newsTypeLayoutBinding.root.setOnClickListener {
-                onItemClick.invoke(newsSource)
+                onItemClick.invoke(adapterPosition, newsSource)
             }
         }
     }

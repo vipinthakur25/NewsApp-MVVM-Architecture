@@ -5,12 +5,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.vipint.newsapp.data.model.Language
 import com.vipint.newsapp.databinding.NewsTypeLayoutBinding
+import com.vipint.newsapp.utils.ItemClickListener
 
 class LanguageAdapter(
     private val languageList: List<Language>,
-    private val onClick: (Language) -> Unit
-) :
+
+    ) :
     RecyclerView.Adapter<LanguageAdapter.LanguageViewHolder>() {
+    lateinit var onItemClick: ItemClickListener<Language>
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -35,7 +37,7 @@ class LanguageAdapter(
 
         fun bind(language: Language) {
             binding.root.setOnClickListener {
-                onClick.invoke(language)
+                onItemClick.invoke(adapterPosition, language)
             }
             binding.tvTypeTitle.text = language.name
         }

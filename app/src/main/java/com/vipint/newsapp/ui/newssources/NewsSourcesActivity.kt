@@ -18,7 +18,8 @@ import com.vipint.newsapp.databinding.ActivityNewsSourcesBinding
 import com.vipint.newsapp.di.component.DaggerActivityComponent
 import com.vipint.newsapp.di.modules.ActivityModule
 import com.vipint.newsapp.ui.base.UIState
-import com.vipint.newsapp.ui.newsbysources.NewsBySourcesActivity
+import com.vipint.newsapp.ui.news.NewsActivity
+import com.vipint.newsapp.utils.AppConstants.NEWS_BY_SOURCES
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -77,8 +78,16 @@ class NewsSourcesActivity : AppCompatActivity() {
 
     private fun renderUi(data: List<SourcesItem>?) {
         data?.let {
-            val newsSourcesAdapter = NewsSourcesAdapter(it) { sourceItem ->
-                NewsBySourcesActivity.start(this, sourceItem.id)
+            val newsSourcesAdapter = NewsSourcesAdapter(it)
+            newsSourcesAdapter.onItemClick = { _, data ->
+                startActivity(
+                    NewsActivity.getStartIntent(
+                        this,
+                        newsSource = data.id,
+                        newsType = NEWS_BY_SOURCES
+                    )
+                )
+
             }
             binding.rvNewsSources.apply {
                 adapter = newsSourcesAdapter

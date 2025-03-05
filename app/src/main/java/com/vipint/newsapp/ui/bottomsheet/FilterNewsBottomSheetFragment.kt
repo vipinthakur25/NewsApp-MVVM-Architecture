@@ -48,8 +48,9 @@ class FilterNewsBottomSheetFragment : BottomSheetDialogFragment() {
 
     private fun initView() {
         _binding.apply {
-            val newsTypeAdapter = NewsTypeAdapter(typeList) {
-                onNewsSourceClick.invoke(it)
+            val newsTypeAdapter = NewsTypeAdapter(typeList)
+            newsTypeAdapter.onItemClick = { _, data ->
+                onNewsSourceClick.invoke(data)
                 dismiss()
             }
             rvNewsType.apply {

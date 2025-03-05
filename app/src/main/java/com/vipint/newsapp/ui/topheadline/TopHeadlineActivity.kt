@@ -1,11 +1,13 @@
 package com.vipint.newsapp.ui.topheadline
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -137,6 +139,12 @@ class TopHeadlineActivity : AppCompatActivity() {
     private fun renderUi(articlesItems: List<ArticlesItem>?) {
         articlesItems?.let {
             val headlineAdapter = TopHeadlineAdapter(it)
+            headlineAdapter.onItemClick = { _, data ->
+                val builder = CustomTabsIntent.Builder()
+                val customTabsIntent = builder.build()
+                customTabsIntent.launchUrl(this, Uri.parse(data.url))
+
+            }
             binding.rvNewsItem.apply {
                 adapter = headlineAdapter
                 hasFixedSize()

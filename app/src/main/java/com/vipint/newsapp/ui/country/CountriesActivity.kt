@@ -1,6 +1,5 @@
 package com.vipint.newsapp.ui.country
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -19,6 +18,8 @@ import com.vipint.newsapp.databinding.ActivityCountriesBinding
 import com.vipint.newsapp.di.component.DaggerActivityComponent
 import com.vipint.newsapp.di.modules.ActivityModule
 import com.vipint.newsapp.ui.base.UIState
+import com.vipint.newsapp.ui.news.NewsActivity
+import com.vipint.newsapp.utils.AppConstants.NEWS_BY_COUNTRY
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -73,8 +74,16 @@ class CountriesActivity : AppCompatActivity() {
     }
 
     private fun initCountriesRV(data: List<Country>) {
-        val countriesAdapter = CountriesAdapter(data) {
-            startActivity(Intent(this, NewsByCountryActivity::class.java).putExtra("country", it))
+        val countriesAdapter = CountriesAdapter(data)
+        countriesAdapter.onItemClick = { _, data ->
+            startActivity(
+                NewsActivity.getStartIntent(
+                    this,
+                    newsType = NEWS_BY_COUNTRY,
+                    countryId = data.id
+                )
+            )
+
         }
         binding.rvNewsSources.apply {
             adapter = countriesAdapter

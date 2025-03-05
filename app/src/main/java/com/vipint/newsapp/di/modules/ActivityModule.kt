@@ -4,9 +4,7 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.vipint.newsapp.data.repository.GetCountryRepository
-import com.vipint.newsapp.data.repository.GetLanguageRepository
-import com.vipint.newsapp.data.repository.NewsByLanguageRepository
-import com.vipint.newsapp.data.repository.NewsBySourcesRepository
+import com.vipint.newsapp.data.repository.NewsRepository
 import com.vipint.newsapp.data.repository.NewsSourcesRepository
 import com.vipint.newsapp.data.repository.NewsTypeRepository
 import com.vipint.newsapp.data.repository.SearchNewsRepository
@@ -15,8 +13,7 @@ import com.vipint.newsapp.di.ActivityContext
 import com.vipint.newsapp.ui.base.ViewModelProviderFactory
 import com.vipint.newsapp.ui.bottomsheet.NewsTypeViewModel
 import com.vipint.newsapp.ui.country.CountriesViewModel
-import com.vipint.newsapp.ui.language.GetNewsByLanguageViewModel
-import com.vipint.newsapp.ui.newsbysources.NewsBySourcesViewModel
+import com.vipint.newsapp.ui.news.NewsViewModel
 import com.vipint.newsapp.ui.newssources.NewsSourcesViewModel
 import com.vipint.newsapp.ui.search.SearchNewsViewModel
 import com.vipint.newsapp.ui.topheadline.TopHeadlinesViewModel
@@ -54,13 +51,6 @@ class ActivityModule(private val activity: AppCompatActivity) {
     }
 
     @Provides
-    fun provideGetNewsByLanguageViewModel(newsByLanguageRepository: NewsByLanguageRepository): GetNewsByLanguageViewModel {
-        return ViewModelProvider(activity, ViewModelProviderFactory(GetNewsByLanguageViewModel::class) {
-            GetNewsByLanguageViewModel(newsByLanguageRepository)
-        })[GetNewsByLanguageViewModel::class.java]
-    }
-
-    @Provides
     fun provideNewsTypeViewModel(newsTypeRepository: NewsTypeRepository): NewsTypeViewModel {
         return ViewModelProvider(activity, ViewModelProviderFactory(NewsTypeViewModel::class) {
             NewsTypeViewModel(newsTypeRepository)
@@ -75,9 +65,9 @@ class ActivityModule(private val activity: AppCompatActivity) {
     }
 
     @Provides
-    fun provideNewsBySourcesViewModel(newsBySourcesRepository: NewsBySourcesRepository): NewsBySourcesViewModel {
-        return ViewModelProvider(activity, ViewModelProviderFactory(NewsBySourcesViewModel::class) {
-            NewsBySourcesViewModel(newsBySourcesRepository)
-        })[NewsBySourcesViewModel::class.java]
+    fun provideNewsViewModel(newsRepository: NewsRepository) : NewsViewModel {
+        return ViewModelProvider(activity, ViewModelProviderFactory(NewsViewModel::class) {
+            NewsViewModel(newsRepository)
+        })[NewsViewModel::class.java]
     }
 }

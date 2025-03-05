@@ -5,8 +5,7 @@ import com.vipint.newsapp.NewsApplication
 import com.vipint.newsapp.data.api.NetworkService
 import com.vipint.newsapp.data.repository.GetCountryRepository
 import com.vipint.newsapp.data.repository.GetLanguageRepository
-import com.vipint.newsapp.data.repository.NewsByLanguageRepository
-import com.vipint.newsapp.data.repository.NewsBySourcesRepository
+import com.vipint.newsapp.data.repository.NewsRepository
 import com.vipint.newsapp.data.repository.NewsSourcesRepository
 import com.vipint.newsapp.data.repository.NewsTypeRepository
 import com.vipint.newsapp.data.repository.SearchNewsRepository
@@ -34,11 +33,9 @@ interface ApplicationComponent {
 
     fun getLanguageRepository(): GetLanguageRepository
 
-    fun getTopHeadlineByNewsSourcesRepository(): NewsBySourcesRepository
-
     fun getCountriesRepository(): GetCountryRepository
 
-    fun getNewsByLanguageRepository(): NewsByLanguageRepository
+    fun getNewsRepository(): NewsRepository
 
     fun getNetworkService(): NetworkService
 }

@@ -2,9 +2,12 @@ package com.vipint.newsapp.di.modules
 
 import android.content.Context
 import com.vipint.newsapp.NewsApplication
+import com.vipint.newsapp.data.api.AuthInterceptor
 import com.vipint.newsapp.data.api.NetworkService
 import com.vipint.newsapp.di.ApplicationContext
 import com.vipint.newsapp.di.BaseUrl
+import com.vipint.newsapp.di.NetworkAPIKey
+import com.vipint.newsapp.utils.AppConstants
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -26,6 +29,9 @@ class ApplicationModule(private val application: NewsApplication) {
     @Provides
     fun providesBaseUrl(): String = "https://newsapi.org/v2/"
 
+    @NetworkAPIKey
+    @Provides
+    fun provideApiKey(): String = AppConstants.API_KEY
 
     @Provides
     @Singleton
@@ -33,21 +39,40 @@ class ApplicationModule(private val application: NewsApplication) {
 
     @Provides
     @Singleton
+    fun provideAuthInterceptor(@NetworkAPIKey apiKey: String) = AuthInterceptor(apiKey)
+
+    @Provides
+    @Singleton
+    fun provideLoggingInterceptor() = HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BODY
+    }
+
+    @Provides
+    @Singleton
+    fun provideOkhttpClient(
+        authInterceptor: AuthInterceptor,
+        loggingInterceptor: HttpLoggingInterceptor
+    ): OkHttpClient {
+        val client = OkHttpClient.Builder().addInterceptor(authInterceptor)
+            .addInterceptor(loggingInterceptor).build()
+        return client
+    }
+
+    @Provides
+    @Singleton
     fun provideNetworkService(
         @BaseUrl baseUrl: String,
-        gsonConverterFactory: GsonConverterFactory
-    ): NetworkService {
-        val loggingInterceptor = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
+        gsonConverterFactory: GsonConverterFactory,
+        okHttpClient: OkHttpClient
 
-        val client = OkHttpClient.Builder().addInterceptor(loggingInterceptor).build()
+    ): NetworkService {
         return Retrofit
             .Builder()
             .baseUrl(baseUrl)
             .addConverterFactory(gsonConverterFactory)
-            .client(client)
+            .client(okHttpClient)
             .build()
             .create(NetworkService::class.java)
     }
 }
+
