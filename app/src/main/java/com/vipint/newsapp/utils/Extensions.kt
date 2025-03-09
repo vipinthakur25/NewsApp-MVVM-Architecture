@@ -24,3 +24,23 @@ fun AppCompatEditText.getTextChangedStateFlow(): StateFlow<String> {
     })
     return query
 }
+
+/**
+ * val extraLanguage =
+ * this.getString(EXTRA_LANGUAGE)?.split(",")?.toPairFromList()
+ */
+
+fun String.toPair(): Pair<String, String> {
+    val splitList = this.split(",")
+    if (this.split(",").size > 2)
+        throw IllegalArgumentException("List is not of length 2!")
+    return Pair(splitList[0], splitList[1])
+}
+
+/*
+fun <T> List<T>.toPairFromList(): Pair<T, T> {
+    if (this.size != 2) {
+        throw IllegalArgumentException("List is not of length 2!")
+    }
+    return Pair(this[0], this[1])
+}*/

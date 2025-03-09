@@ -19,12 +19,6 @@
             android:name=".ui.news.NewsActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.language.NewsByLanguageActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.country.NewsByCountryActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.language.LanguageActivity"
             android:exported="false" />
         <activity

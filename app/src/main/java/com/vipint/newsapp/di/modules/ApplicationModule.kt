@@ -6,6 +6,8 @@ import com.vipint.newsapp.data.api.AuthInterceptor
 import com.vipint.newsapp.data.api.NetworkService
 import com.vipint.newsapp.di.ApplicationContext
 import com.vipint.newsapp.di.BaseUrl
+import com.vipint.newsapp.di.DispatchersProvider
+import com.vipint.newsapp.di.DispatchersProviderImpl
 import com.vipint.newsapp.di.NetworkAPIKey
 import com.vipint.newsapp.utils.AppConstants
 import dagger.Module
@@ -46,6 +48,10 @@ class ApplicationModule(private val application: NewsApplication) {
     fun provideLoggingInterceptor() = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
+
+    @Provides
+    @Singleton
+    fun provideCoroutineDispatchers(): DispatchersProvider = DispatchersProviderImpl()
 
     @Provides
     @Singleton

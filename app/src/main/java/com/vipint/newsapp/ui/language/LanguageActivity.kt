@@ -93,26 +93,46 @@ class LanguageActivity : AppCompatActivity() {
 
     private fun initLanguageRV(data: List<Language>) {
         val countriesAdapter = LanguageAdapter(data)
-        countriesAdapter.onItemClick = { _, data ->
+        countriesAdapter.onItemClick = { _, selectedLanguage ->
+            if (selectedLanguage.size == 2) {
+                val selectedLanguageString = getStringPairFromList(selectedLanguage, transform = { it.id }).joinToString(",")
+                binding.btnProceed.apply {
+                    visibility = View.VISIBLE
+                    setOnClickListener {
+                        startActivity(
+                            NewsActivity.getStartIntent(
+                                context = this@LanguageActivity,
+                                language = selectedLanguageString,
+                                newsType = NEWS_BY_LANGUAGE
+                            )
+                        )
+                    }
+                }
 
-            startActivity(
-                NewsActivity.getStartIntent(
-                    context = this,
-                    language = data.id,
-                    newsType = NEWS_BY_LANGUAGE
-                )
-            )
-
+            } else {
+                binding.btnProceed.visibility = View.GONE
+            }
         }
+
         binding.rvNewsSources.apply {
             adapter = countriesAdapter
             hasFixedSize()
         }
+
     }
 
     private fun injectDependencies() {
         DaggerActivityComponent.builder()
             .applicationComponent((application as NewsApplication).applicationComponent)
             .activityModule(ActivityModule(this)).build().inject(this)
+    }
+
+    private inline fun <T, R> getStringPairFromList(
+        languageList: List<T>,
+        transform: (T) -> R
+    ): List<R> {
+        return languageList.map {
+            transform(it)
+        }
     }
 }

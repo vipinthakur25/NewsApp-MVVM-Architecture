@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vipint.newsapp.data.model.ArticlesItem
 import com.vipint.newsapp.data.repository.SearchNewsRepository
+import com.vipint.newsapp.di.DispatchersProvider
 import com.vipint.newsapp.ui.base.UIState
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -23,7 +23,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-class SearchNewsViewModel @Inject constructor(private val searchNewsRepository: SearchNewsRepository) :
+class SearchNewsViewModel @Inject constructor(
+    private val searchNewsRepository: SearchNewsRepository,
+    private val dispatchersProvider: DispatchersProvider
+) :
     ViewModel() {
 
     private val _searchDataStateFlow = MutableStateFlow<UIState<List<ArticlesItem>?>>(UIState.Idle)
@@ -37,7 +40,7 @@ class SearchNewsViewModel @Inject constructor(private val searchNewsRepository: 
             emit(UIState.Success(result.articles))
         }.catch { exception ->
             emit(UIState.Error(exception.message ?: "Unknown Error"))
-        }.flowOn(Dispatchers.IO)
+        }.flowOn(dispatchersProvider.io)
 
     init {
         getNewsBySearchKey()
@@ -57,7 +60,7 @@ class SearchNewsViewModel @Inject constructor(private val searchNewsRepository: 
                 .flatMapLatest { query ->
                     getSearchNews(query)
                 }
-                .flowOn(Dispatchers.Default)
+                .flowOn(dispatchersProvider.default)
                 .collectLatest {
                     _searchDataStateFlow.value = it
                 }

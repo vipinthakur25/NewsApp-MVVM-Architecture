@@ -11,6 +11,7 @@ import com.vipint.newsapp.data.repository.NewsTypeRepository
 import com.vipint.newsapp.data.repository.SearchNewsRepository
 import com.vipint.newsapp.data.repository.TopHeadlinesRepository
 import com.vipint.newsapp.di.ApplicationContext
+import com.vipint.newsapp.di.DispatchersProvider
 import com.vipint.newsapp.di.modules.ApplicationModule
 import dagger.Component
 import javax.inject.Singleton
@@ -38,4 +39,6 @@ interface ApplicationComponent {
     fun getNewsRepository(): NewsRepository
 
     fun getNetworkService(): NetworkService
+
+    fun getDispatcher() : DispatchersProvider
 }

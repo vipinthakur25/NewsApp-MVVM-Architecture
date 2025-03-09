@@ -172,4 +172,6 @@ class NewsActivity : AppCompatActivity() {
             .applicationComponent((application as NewsApplication).applicationComponent)
             .activityModule(ActivityModule(this)).build().inject(this)
     }
+
+
 }
