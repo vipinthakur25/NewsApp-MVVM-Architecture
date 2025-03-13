@@ -6,7 +6,7 @@ import com.vipint.newsapp.data.model.Language
 import com.vipint.newsapp.data.repository.GetLanguageRepository
 import com.vipint.newsapp.di.DispatchersProvider
 import com.vipint.newsapp.ui.base.UIState
-import kotlinx.coroutines.Dispatchers
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class LanguageViewmodel @Inject constructor(
     private val getLanguageRepository: GetLanguageRepository,
     private val dispatchersProvider: DispatchersProvider

@@ -9,32 +9,33 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.vipint.newsapp.NewsApplication
 import com.vipint.newsapp.R
 import com.vipint.newsapp.data.model.Language
 import com.vipint.newsapp.databinding.ActivityLanguageBinding
-import com.vipint.newsapp.di.component.DaggerActivityComponent
-import com.vipint.newsapp.di.modules.ActivityModule
 import com.vipint.newsapp.ui.base.UIState
 import com.vipint.newsapp.ui.news.NewsActivity
+import com.vipint.newsapp.ui.topheadline.TopHeadlinesViewModel
 import com.vipint.newsapp.utils.AppConstants.NEWS_BY_LANGUAGE
+import com.vipint.newsapp.utils.getStringPairFromList
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
+@AndroidEntryPoint
 class LanguageActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLanguageBinding
+    private lateinit var topHeadlinesViewModel: TopHeadlinesViewModel
 
-    @Inject
-    lateinit var languageViewmodel: LanguageViewmodel
+    private lateinit var languageViewmodel: LanguageViewmodel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityLanguageBinding.inflate(layoutInflater)
-        injectDependencies()
         setContentView(binding.root)
+        setupViewModel()
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -42,6 +43,11 @@ class LanguageActivity : AppCompatActivity() {
         }
         initViews()
         viewModelObserver()
+    }
+
+    private fun setupViewModel() {
+        topHeadlinesViewModel = ViewModelProvider(this)[TopHeadlinesViewModel::class.java]
+        languageViewmodel = ViewModelProvider(this)[LanguageViewmodel::class.java]
     }
 
     private fun initViews() {
@@ -95,7 +101,8 @@ class LanguageActivity : AppCompatActivity() {
         val countriesAdapter = LanguageAdapter(data)
         countriesAdapter.onItemClick = { _, selectedLanguage ->
             if (selectedLanguage.size == 2) {
-                val selectedLanguageString = getStringPairFromList(selectedLanguage, transform = { it.id }).joinToString(",")
+                val selectedLanguageString =
+                    getStringPairFromList(selectedLanguage, transform = { it.id }).joinToString(",")
                 binding.btnProceed.apply {
                     visibility = View.VISIBLE
                     setOnClickListener {
@@ -121,18 +128,5 @@ class LanguageActivity : AppCompatActivity() {
 
     }
 
-    private fun injectDependencies() {
-        DaggerActivityComponent.builder()
-            .applicationComponent((application as NewsApplication).applicationComponent)
-            .activityModule(ActivityModule(this)).build().inject(this)
-    }
 
-    private inline fun <T, R> getStringPairFromList(
-        languageList: List<T>,
-        transform: (T) -> R
-    ): List<R> {
-        return languageList.map {
-            transform(it)
-        }
-    }
 }

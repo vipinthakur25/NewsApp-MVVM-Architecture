@@ -7,6 +7,7 @@ import com.vipint.newsapp.data.repository.NewsRepository
 import com.vipint.newsapp.di.DispatchersProvider
 import com.vipint.newsapp.ui.base.UIState
 import com.vipint.newsapp.utils.toPair
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class NewsViewModel @Inject constructor(
     private val newsRepository: NewsRepository,
     private val dispatchersProvider: DispatchersProvider

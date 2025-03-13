@@ -12,14 +12,12 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.vipint.newsapp.NewsApplication
 import com.vipint.newsapp.R
 import com.vipint.newsapp.data.model.ArticlesItem
 import com.vipint.newsapp.databinding.ActivityTopHeadlinesBinding
-import com.vipint.newsapp.di.component.DaggerActivityComponent
-import com.vipint.newsapp.di.modules.ActivityModule
 import com.vipint.newsapp.ui.base.UIState
 import com.vipint.newsapp.ui.bottomsheet.FilterNewsBottomSheetFragment
 import com.vipint.newsapp.ui.bottomsheet.NewsTypeViewModel
@@ -29,20 +27,18 @@ import com.vipint.newsapp.ui.newssources.NewsSourcesActivity
 import com.vipint.newsapp.ui.search.SearchActivity
 import com.vipint.newsapp.utils.AppConstants.COUNTRY
 import com.vipint.newsapp.utils.NewsType
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
+@AndroidEntryPoint
 class TopHeadlineActivity : AppCompatActivity() {
-    @Inject
-    lateinit var newsListViewModel: TopHeadlinesViewModel
 
-    @Inject
-    lateinit var newsTypeViewModel: NewsTypeViewModel
+    private lateinit var newsListViewModel: TopHeadlinesViewModel
+    private lateinit var newsTypeViewModel: NewsTypeViewModel
     private lateinit var binding: ActivityTopHeadlinesBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityTopHeadlinesBinding.inflate(layoutInflater)
-        injectDependencies()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(binding.root)
@@ -51,9 +47,15 @@ class TopHeadlineActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        setupViewModel()
         initUi()
         setUpObserver()
 
+    }
+
+    private fun setupViewModel() {
+        newsTypeViewModel = ViewModelProvider(this)[NewsTypeViewModel::class.java]
+        newsListViewModel = ViewModelProvider(this)[TopHeadlinesViewModel::class.java]
     }
 
     private fun initUi() {
@@ -63,8 +65,7 @@ class TopHeadlineActivity : AppCompatActivity() {
             this.appBar.ivSearch.visibility = View.VISIBLE
             this.appBar.ivAction.setImageDrawable(
                 ContextCompat.getDrawable(
-                    this@TopHeadlineActivity,
-                    R.drawable.ic_news
+                    this@TopHeadlineActivity, R.drawable.ic_news
                 )
             )
             this.appBar.ivSearch.setOnClickListener {
@@ -154,9 +155,4 @@ class TopHeadlineActivity : AppCompatActivity() {
 
     }
 
-    private fun injectDependencies() {
-        DaggerActivityComponent.builder()
-            .applicationComponent((application as NewsApplication).applicationComponent)
-            .activityModule(ActivityModule(this)).build().inject(this)
-    }
 }

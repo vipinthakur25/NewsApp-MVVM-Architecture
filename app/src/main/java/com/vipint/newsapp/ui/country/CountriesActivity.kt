@@ -9,38 +9,41 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.vipint.newsapp.NewsApplication
 import com.vipint.newsapp.R
 import com.vipint.newsapp.data.model.Country
 import com.vipint.newsapp.databinding.ActivityCountriesBinding
-import com.vipint.newsapp.di.component.DaggerActivityComponent
-import com.vipint.newsapp.di.modules.ActivityModule
 import com.vipint.newsapp.ui.base.UIState
 import com.vipint.newsapp.ui.news.NewsActivity
 import com.vipint.newsapp.utils.AppConstants.NEWS_BY_COUNTRY
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
+@AndroidEntryPoint
 class CountriesActivity : AppCompatActivity() {
-    @Inject
-    lateinit var countriesViewModel: CountriesViewModel
+
+    private lateinit var countriesViewModel: CountriesViewModel
     lateinit var binding: ActivityCountriesBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityCountriesBinding.inflate(layoutInflater)
-        injectDependencies()
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        setupViewModel()
         initView()
         initObservers()
+    }
+
+    private fun setupViewModel() {
+        countriesViewModel = ViewModelProvider(this)[CountriesViewModel::class.java]
     }
 
     private fun initObservers() {
@@ -108,10 +111,4 @@ class CountriesActivity : AppCompatActivity() {
         }
     }
 
-
-    private fun injectDependencies() {
-        DaggerActivityComponent.builder()
-            .applicationComponent((application as NewsApplication).applicationComponent)
-            .activityModule(ActivityModule(this)).build().inject(this)
-    }
 }

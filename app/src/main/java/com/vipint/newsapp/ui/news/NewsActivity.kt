@@ -15,12 +15,9 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.vipint.newsapp.NewsApplication
 import com.vipint.newsapp.R
 import com.vipint.newsapp.data.model.ArticlesItem
 import com.vipint.newsapp.databinding.ActivityNewsBinding
-import com.vipint.newsapp.di.component.DaggerActivityComponent
-import com.vipint.newsapp.di.modules.ActivityModule
 import com.vipint.newsapp.ui.base.UIState
 import com.vipint.newsapp.ui.topheadline.TopHeadlineAdapter
 import com.vipint.newsapp.utils.AppConstants.NEWS_BY_COUNTRY
@@ -28,18 +25,15 @@ import com.vipint.newsapp.utils.AppConstants.NEWS_BY_LANGUAGE
 import com.vipint.newsapp.utils.AppConstants.NEWS_BY_SOURCES
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 class NewsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityNewsBinding
 
-    @Inject
-    lateinit var newsViewModel: NewsViewModel
+    private lateinit var newsViewModel: NewsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        injectDependencies()
         binding = ActivityNewsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -166,12 +160,5 @@ class NewsActivity : AppCompatActivity() {
             }
         }
     }
-
-    private fun injectDependencies() {
-        DaggerActivityComponent.builder()
-            .applicationComponent((application as NewsApplication).applicationComponent)
-            .activityModule(ActivityModule(this)).build().inject(this)
-    }
-
 
 }

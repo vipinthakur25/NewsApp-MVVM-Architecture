@@ -9,30 +9,27 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.vipint.newsapp.NewsApplication
 import com.vipint.newsapp.R
 import com.vipint.newsapp.data.model.SourcesItem
 import com.vipint.newsapp.databinding.ActivityNewsSourcesBinding
-import com.vipint.newsapp.di.component.DaggerActivityComponent
-import com.vipint.newsapp.di.modules.ActivityModule
 import com.vipint.newsapp.ui.base.UIState
 import com.vipint.newsapp.ui.news.NewsActivity
 import com.vipint.newsapp.utils.AppConstants.NEWS_BY_SOURCES
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
+@AndroidEntryPoint
 class NewsSourcesActivity : AppCompatActivity() {
-    @Inject
-    lateinit var newsSourcesViewModel: NewsSourcesViewModel
+    private lateinit var newsSourcesViewModel: NewsSourcesViewModel
     private lateinit var binding: ActivityNewsSourcesBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        injectDependencies()
         binding = ActivityNewsSourcesBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -40,10 +37,14 @@ class NewsSourcesActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        setupViewModel()
         initView()
         setUpObserver()
     }
 
+    private fun setupViewModel() {
+        newsSourcesViewModel = ViewModelProvider(this)[NewsSourcesViewModel::class.java]
+    }
 
     private fun setUpObserver() {
         lifecycleScope.launch {
@@ -112,13 +113,5 @@ class NewsSourcesActivity : AppCompatActivity() {
                 onBackPressedDispatcher.onBackPressed()
             }
         }
-    }
-
-
-    private fun injectDependencies() {
-        DaggerActivityComponent
-            .builder()
-            .applicationComponent((application as NewsApplication).applicationComponent)
-            .activityModule(ActivityModule(this)).build().inject(this)
     }
 }

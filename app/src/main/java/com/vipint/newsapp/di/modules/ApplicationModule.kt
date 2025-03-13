@@ -1,10 +1,7 @@
 package com.vipint.newsapp.di.modules
 
-import android.content.Context
-import com.vipint.newsapp.NewsApplication
 import com.vipint.newsapp.data.api.AuthInterceptor
 import com.vipint.newsapp.data.api.NetworkService
-import com.vipint.newsapp.di.ApplicationContext
 import com.vipint.newsapp.di.BaseUrl
 import com.vipint.newsapp.di.DispatchersProvider
 import com.vipint.newsapp.di.DispatchersProviderImpl
@@ -12,6 +9,8 @@ import com.vipint.newsapp.di.NetworkAPIKey
 import com.vipint.newsapp.utils.AppConstants
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -19,13 +18,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
-class ApplicationModule(private val application: NewsApplication) {
+@InstallIn(SingletonComponent::class)
+class ApplicationModule() {
 
-    @ApplicationContext
-    @Provides
-    fun provideContext(): Context {
-        return application
-    }
 
     @BaseUrl
     @Provides

@@ -6,6 +6,7 @@ import com.vipint.newsapp.data.model.ArticlesItem
 import com.vipint.newsapp.data.repository.SearchNewsRepository
 import com.vipint.newsapp.di.DispatchersProvider
 import com.vipint.newsapp.ui.base.UIState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -22,7 +23,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
+@HiltViewModel
 class SearchNewsViewModel @Inject constructor(
     private val searchNewsRepository: SearchNewsRepository,
     private val dispatchersProvider: DispatchersProvider
