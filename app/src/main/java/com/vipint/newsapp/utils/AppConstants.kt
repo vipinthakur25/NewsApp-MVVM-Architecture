@@ -10,8 +10,10 @@ object AppConstants {
     const val NEWS_BY_SOURCES = "sources"
     const val NEWS_BY_COUNTRY = "country"
     const val NEWS_BY_LANGUAGE = "language"
-
-
+    const val APP_NAME = "News App"
+    const val SOURCE_ID = "sourceId"
+    const val COUNTRY_ID = "countryId"
+    const val LANGUAGE_ID = "languageId"
     val COUNTRIES = listOf(
         Country("ae", "United Arab Emirates"),
         Country("ar", "Argentina"),
@@ -82,6 +84,7 @@ object AppConstants {
         Language("ru", "Russian"),
         Language("sv", "Swedish"),
         Language("ud", "Undefined"),
-        Language("zh", "Chinese")
+        Language("zh", "Chinese"),
+
     )
 }

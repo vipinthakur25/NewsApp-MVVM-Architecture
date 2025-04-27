@@ -1,4 +1,4 @@
-package com.vipint.newsapp.ui.topheadline
+package com.vipint.newsapp.ui.topHeadline
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
