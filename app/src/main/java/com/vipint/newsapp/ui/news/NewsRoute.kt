@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vipint.newsapp.data.model.ArticlesItem
+import com.vipint.newsapp.ui.base.EmptyStateUIScreen
 import com.vipint.newsapp.ui.base.ShowError
 import com.vipint.newsapp.ui.base.ShowLoading
 import com.vipint.newsapp.ui.base.UIState
@@ -17,28 +18,34 @@ fun NewsRoute(
     countryId: String? = null,
     sourceId: String? = null,
     newsViewModel: NewsViewModel = hiltViewModel(),
-    onArticleClicked: (ArticlesItem?) -> Unit
+    onArticleClicked: (ArticlesItem?) -> Unit,
+    onRetryClick: () -> Unit
 ) {
     val newsListState by newsViewModel.uiState.collectAsStateWithLifecycle()
     LaunchedEffect(key1 = Unit) {
-        if (!languageId.isNullOrEmpty()){
+        if (!languageId.isNullOrEmpty()) {
             newsViewModel.getNewsByLanguage(languageId)
         }
-        if (!countryId.isNullOrEmpty()){
+        if (!countryId.isNullOrEmpty()) {
             newsViewModel.getNewsByCountry(countryId)
         }
-        if (!sourceId.isNullOrEmpty()){
+        if (!sourceId.isNullOrEmpty()) {
             newsViewModel.getNewsBySources(sourceId)
         }
 
     }
-    NewsListScreen(uiState = newsListState, onArticleClicked = onArticleClicked)
+    NewsListScreen(
+        uiState = newsListState,
+        onArticleClicked = onArticleClicked,
+        onRetryClick = onRetryClick
+    )
 }
 
 @Composable
 fun NewsListScreen(
     uiState: UIState<List<ArticlesItem>?>,
-    onArticleClicked: (ArticlesItem?) -> Unit
+    onArticleClicked: (ArticlesItem?) -> Unit,
+    onRetryClick: () -> Unit
 ) {
     when (uiState) {
         is UIState.Error -> {
@@ -55,7 +62,10 @@ fun NewsListScreen(
 
         is UIState.Success -> {
             uiState.data?.let {
-                ArticleList(articles = it, onArticleClicked = onArticleClicked) }
+                if (it.isNotEmpty()) {
+                    ArticleList(articles = it, onArticleClicked = onArticleClicked)
+                } else EmptyStateUIScreen(onCLick = onRetryClick)
+            }
         }
     }
 }

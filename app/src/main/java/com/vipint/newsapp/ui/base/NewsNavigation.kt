@@ -81,6 +81,9 @@ fun NewsNavHost() {
                 languageId = languageId,
                 onArticleClicked = {
                     openCustomChromeTab(context = context, url = it?.url)
+                },
+                onRetryClick = {
+                    navController.popBackStack()
                 })
         }
         composable(route = Route.SearchNewsRoute.name) {
