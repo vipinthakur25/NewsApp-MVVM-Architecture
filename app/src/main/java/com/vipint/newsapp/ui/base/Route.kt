@@ -18,4 +18,7 @@ sealed class Route(val name: String) {
     }
 
     object SearchNewsRoute : Route("searchNews")
+    object OfflineArticleRoute : Route("offlineArticleScreen")
+    object TopHeadlinePaginationRoute : Route("topHeadlinePaginationScreen")
+
 }

@@ -33,24 +33,31 @@ import com.vipint.newsapp.utils.AppConstants
 @Composable
 fun TopHeadlineRoute(
     onArticleClicked: (ArticlesItem?) -> Unit,
-    topHeadlinesViewModel: TopHeadlinesViewModel = hiltViewModel()
+    topHeadlinesViewModel: TopHeadlinesViewModel = hiltViewModel(),
 ) {
     LaunchedEffect(key1 = Unit) {
         topHeadlinesViewModel.fetchNews(AppConstants.COUNTRY)
     }
     val topHeadlineUiState by topHeadlinesViewModel.uiState.collectAsStateWithLifecycle()
-    TopHeadlineScreen(uiState = topHeadlineUiState, onArticleClicked = onArticleClicked)
+    TopHeadlineScreen(
+        uiState = topHeadlineUiState,
+        onArticleClicked = onArticleClicked,
+        onRetryClick = {
+            topHeadlinesViewModel.fetchNews(AppConstants.COUNTRY)
+        }
+    )
 
 }
 
 @Composable
 fun TopHeadlineScreen(
     uiState: UIState<List<ArticlesItem>?>,
-    onArticleClicked: (ArticlesItem?) -> Unit
+    onArticleClicked: (ArticlesItem?) -> Unit,
+    onRetryClick: () -> Unit
 ) {
     when (uiState) {
         is UIState.Error -> {
-            ShowError(uiState.message)
+            ShowError(uiState.message, onRetryClick)
         }
 
         UIState.Idle -> {

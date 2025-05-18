@@ -10,3 +10,7 @@ annotation class BaseUrl
 @Retention(AnnotationRetention.BINARY)
 annotation class NetworkAPIKey
 
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class DatabaseName
+

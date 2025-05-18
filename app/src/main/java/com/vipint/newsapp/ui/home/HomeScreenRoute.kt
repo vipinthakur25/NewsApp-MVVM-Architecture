@@ -43,5 +43,15 @@ fun HomeScreenRoute(navController: NavController) {
                 navController = navController,
                 routeName = "searchNews"
             )
+            MainScreenItemSection(
+                title = stringResource(R.string.offlineArticleScreen),
+                navController = navController,
+                routeName = "offlineArticleScreen"
+            )
+            MainScreenItemSection(
+                title = stringResource(R.string.topHeadlinePaginationScreen),
+                navController = navController,
+                routeName = "topHeadlinePaginationScreen"
+            )
         })
 }

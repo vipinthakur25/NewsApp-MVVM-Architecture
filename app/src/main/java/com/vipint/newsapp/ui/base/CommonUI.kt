@@ -43,20 +43,30 @@ fun ShowLoading() {
 }
 
 @Composable
-fun ShowError(text: String) {
+fun ShowError(text: String, onRetryClick: () -> Unit = {}) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
     ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.titleMedium,
-            color = Color.Red,
-            modifier = Modifier
-                .align(Alignment.Center)
-                .padding(4.dp)
-        )
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = text,
+                style = MaterialTheme.typography.titleMedium,
+                color = Color.Red,
+                modifier = Modifier
+                    .padding(4.dp)
+            )
+            Button(onClick = {
+                onRetryClick()
+            }) {
+                Text(text = stringResource(R.string.retry))
+            }
+        }
     }
 
 }

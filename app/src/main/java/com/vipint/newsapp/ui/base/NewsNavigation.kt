@@ -10,11 +10,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.vipint.newsapp.ui.TopHeadlinePaginationRoute
 import com.vipint.newsapp.ui.country.CountrySelectionRoute
 import com.vipint.newsapp.ui.home.HomeScreenRoute
 import com.vipint.newsapp.ui.language.LanguageSelectionRoute
 import com.vipint.newsapp.ui.news.NewsRoute
 import com.vipint.newsapp.ui.newssources.NewsSourcesRoute
+import com.vipint.newsapp.ui.offline.OfflineArticleScreenRoute
 import com.vipint.newsapp.ui.search.SearchNewsRoute
 import com.vipint.newsapp.ui.topHeadline.TopHeadlineRoute
 import com.vipint.newsapp.utils.AppConstants
@@ -90,6 +92,14 @@ fun NewsNavHost() {
             SearchNewsRoute(onArticleClicked = {
                 openCustomChromeTab(context = context, url = it?.url)
             })
+        }
+        composable(route = Route.OfflineArticleRoute.name) {
+            OfflineArticleScreenRoute(onArticleClicked = {
+                openCustomChromeTab(context, url = it?.url)
+            })
+        }
+        composable(route = Route.TopHeadlinePaginationRoute.name) {
+            TopHeadlinePaginationRoute()
         }
 
     }
