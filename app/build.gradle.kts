@@ -51,7 +51,11 @@ android {
 }
 
 dependencies {
+    val paging_version = "3.3.6"
 
+    // optional - Jetpack Compose integration
+    implementation("androidx.paging:paging-compose:3.3.6")
+    implementation("androidx.paging:paging-runtime:$paging_version")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

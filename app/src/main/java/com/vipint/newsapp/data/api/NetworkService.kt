@@ -2,6 +2,7 @@ package com.vipint.newsapp.data.api
 
 import com.vipint.newsapp.data.model.NewsSourcesResponse
 import com.vipint.newsapp.data.model.TopHeadLineResponse
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -32,4 +33,10 @@ interface NetworkService {
         @Query("language") language: String
     ): TopHeadLineResponse
 
+    @GET("top-headlines")
+    suspend fun fetchTopHeadlinePaginated(
+        @Query("country") country: String = "us",
+        @Query("page") page: Int,
+        @Query("pageSize") pageSize: Int
+    ) : Response<TopHeadLineResponse>
 }

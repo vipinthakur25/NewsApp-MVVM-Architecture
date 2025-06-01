@@ -10,7 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.vipint.newsapp.ui.TopHeadlinePaginationRoute
+import com.vipint.newsapp.ui.toHeadlinePagination.TopHeadlinePaginationRoute
 import com.vipint.newsapp.ui.country.CountrySelectionRoute
 import com.vipint.newsapp.ui.home.HomeScreenRoute
 import com.vipint.newsapp.ui.language.LanguageSelectionRoute
@@ -99,7 +99,9 @@ fun NewsNavHost() {
             })
         }
         composable(route = Route.TopHeadlinePaginationRoute.name) {
-            TopHeadlinePaginationRoute()
+            TopHeadlinePaginationRoute(onArticleClicked = {
+                openCustomChromeTab(context, url = it?.url)
+            })
         }
 
     }
