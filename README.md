@@ -124,6 +124,10 @@ This project demonstrates best practices in modern Android development and is id
 ```
 ![Untitled design (1)](https://github.com/user-attachments/assets/11556e2c-3344-4afb-a6de-74199c0c3422)
 
+## 🚀 About Me
+Hi there! My name is Vipin Kumar Thakur, I work as a Software Developer.
 
+## 🔗 Links
+[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/vipin-kumar-thakur-6b3a9415a/)
 
 
