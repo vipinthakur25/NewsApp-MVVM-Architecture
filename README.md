@@ -34,8 +34,96 @@ This project demonstrates best practices in modern Android development and is id
   
 ## Project Structure
 
-![image](https://github.com/user-attachments/assets/10e9200c-851d-4d81-823c-df4283a69cc9)
+## Project Structure
+``` bash
+├── data
+│   ├── api
+│   │   ├── AuthInterceptor.kt
+│   │   └── NetworkService.kt
+│   ├── local
+│   │   ├── AppDatabase.kt
+│   │   ├── AppDatabaseService.kt
+│   │   ├── DatabaseService.kt
+│   │   ├── dao
+│   │   │   └── ArticleDao.kt
+│   │   └── entitiy
+│   │       ├── Article.kt
+│   │       └── Source.kt
+│   ├── model
+│   │   ├── Country.kt
+│   │   ├── Language.kt
+│   │   ├── NewsSourcesResponse.kt
+│   │   └── TopHeadLineResponse.kt
+│   ├── paging
+│   │   └── TopHeadlinePagingSource.kt
+│   └── repository
+│       ├── GetCountryRepository.kt
+│       ├── GetLanguageRepository.kt
+│       ├── NewsRepository.kt
+│       ├── NewsSourcesRepository.kt
+│       ├── NewsTypeRepository.kt
+│       ├── OfflineArticleRepository.kt
+│       ├── SearchNewsRepository.kt
+│       ├── TopHeadlinePagingSourceRepository.kt
+│       └── TopHeadlinesRepository.kt
+├── di
+│   ├── DispatchersProvider.kt
+│   ├── Qualifiers.kt
+│   └── modules
+│       └── ApplicationModule.kt
+├── theme
+│   ├── Color.kt
+│   ├── Theme.kt
+│   └── Type.kt
+├── ui
+│   ├── base
+│   │   ├── CommonUI.kt
+│   │   ├── NewsNavigation.kt
+│   │   ├── Route.kt
+│   │   └── UIState.kt
+│   ├── country
+│   │   ├── CountriesViewModel.kt
+│   │   └── CountrySelectionRoute.kt
+│   ├── home
+│   │   ├── HomeScreenRoute.kt
+│   │   └── uicomponets
+│   │       └── MainScreenItemSection.kt
+│   ├── language
+│   │   ├── LanguageSelectionRoute.kt
+│   │   └── LanguageViewmodel.kt
+│   ├── main
+│   │   └── MainActivity.kt
+│   ├── news
+│   │   ├── NewsRoute.kt
+│   │   └── NewsViewModel.kt
+│   ├── newssources
+│   │   ├── NewsSourcesRoute.kt
+│   │   └── NewsSourcesViewModel.kt
+│   ├── offline
+│   │   ├── OfflineArticleRoute.kt
+│   │   └── OfflineArticleViewModel.kt
+│   ├── search
+│   │   ├── SearchNewsRoute.kt
+│   │   └── SearchNewsViewModel.kt
+│   ├── toHeadlinePagination
+│   │   ├── TopHeadlinePaginationRoute.kt
+│   │   └── TopHeadlinePaginationViewModel.kt
+│   └── topHeadline
+│       ├── TopHeadlineRoute.kt
+│       └── TopHeadlinesViewModel.kt
+├── utils
+│   ├── AppConstants.kt
+│   ├── Extensions.kt
+│   ├── Helper.kt
+│   ├── NetworkHelper.kt
+│   ├── NewsType.kt
+│   ├── TimeUtil.kt
+│   └── typealias.kt
+└── worker
+    └── NewsWorker.kt
+```
+![Untitled design (1)](https://github.com/user-attachments/assets/11556e2c-3344-4afb-a6de-74199c0c3422)
 
-![Untitled design](https://github.com/user-attachments/assets/f702a7eb-8cb9-4f72-bd8a-6c6bd7731336)
+
 
 
