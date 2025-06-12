@@ -15,9 +15,9 @@ This project demonstrates best practices in modern Android development and is id
 
 ## Branches
 
-- main: Jetpack Compose using Dagger Hilt
-- xml-dagger-hilt: XML using Dagger Hilt
-- xml-dagger-2: XML using Dagger 2
+- compose-ui-migration: Jetpack Compose using Dagger Hilt
+- dagger-hilt-migration: XML using Dagger Hilt
+- main: XML using Dagger 2
 ## Features
 
 - Instant search using Flow operators
