@@ -4,7 +4,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -15,7 +14,6 @@ import com.vipint.newsapp.ui.topHeadline.NewsRowItem
 
 @Composable
 fun TopHeadlinePaginationRoute(
-    modifier: Modifier = Modifier,
     topHeadlinePaginationViewModel: TopHeadlinePaginationViewModel = hiltViewModel(),
     onArticleClicked: (ArticlesItem?) -> Unit
 ) {

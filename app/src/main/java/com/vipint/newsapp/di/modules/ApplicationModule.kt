@@ -2,6 +2,7 @@ package com.vipint.newsapp.di.modules
 
 import android.content.Context
 import androidx.room.Room
+import androidx.work.WorkManager
 import com.vipint.newsapp.data.api.AuthInterceptor
 import com.vipint.newsapp.data.api.NetworkService
 import com.vipint.newsapp.data.local.AppDatabase
@@ -106,5 +107,13 @@ class ApplicationModule() {
     @Singleton
     fun provideAppDatabaseService(appDatabase: AppDatabase): DatabaseService =
         AppDatabaseService(appDatabase)
+
+    @Provides
+    @Singleton
+    fun provideWorkManager(
+        @ApplicationContext context: Context
+    ): WorkManager {
+        return WorkManager.getInstance(context)
+    }
 }
 
